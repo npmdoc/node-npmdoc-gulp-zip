@@ -61,12 +61,124 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-zip">module gulp-zip</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-zip.gulp-zip">
+            function <span class="apidocSignatureSpan"></span>gulp-zip
+            <span class="apidocSignatureSpan">(filename, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-zip.toString">
+            function <span class="apidocSignatureSpan">gulp-zip.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-zip" id="apidoc.module.gulp-zip">module gulp-zip</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-zip.gulp-zip" id="apidoc.element.gulp-zip.gulp-zip">
+        function <span class="apidocSignatureSpan"></span>gulp-zip
+        <span class="apidocSignatureSpan">(filename, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">(filename, opts) =&#x3e; {
+	if (!filename) {
+		throw new gutil.PluginError(&#x27;gulp-zip&#x27;, &#x27;`filename` required&#x27;);
+	}
+
+	opts = Object.assign({
+		compress: true
+	}, opts);
+
+	let firstFile;
+	const zip = new Yazl.ZipFile();
+
+	return through.obj((file, enc, cb) =&#x3e; {
+		if (!firstFile) {
+			firstFile = file;
+		}
+
+		// Because Windows...
+		const pathname = file.relative.replace(/\\/g, &#x27;/&#x27;);
+
+		if (!pathname) {
+			cb();
+			return;
+		}
+
+		if (file.isNull() &#x26;&#x26; file.stat &#x26;&#x26; file.stat.isDirectory &#x26;&#x26; file.stat.isDirectory()) {
+			zip.addEmptyDirectory(pathname, {
+				mtime: file.stat.mtime || new Date(),
+				mode: file.stat.mode
+			});
+		} else {
+			const stat = {
+				compress: opts.compress,
+				mtime: file.stat ? file.stat.mtime : new Date(),
+				mode: file.stat ? file.stat.mode : null
+			};
+
+			if (file.isStream()) {
+				zip.addReadStream(file.contents, pathname, stat);
+			}
+
+			if (file.isBuffer()) {
+				zip.addBuffer(file.contents, pathname, stat);
+			}
+		}
+
+		cb();
+	}, function (cb) {
+		if (!firstFile) {
+			cb();
+			return;
+		}
+
+		getStream.buffer(zip.outputStream).then(data =&#x3e; {
+			this.push(new gutil.File({
+				cwd: firstFile.cwd,
+				base: firstFile.base,
+				path: path.join(firstFile.base, filename),
+				contents: data
+			}));
+
+			cb(); // eslint-disable-line promise/no-callback-in-promise
+		});
+
+		zip.end();
+	});
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-zip.toString" id="apidoc.element.gulp-zip.toString">
+        function <span class="apidocSignatureSpan">gulp-zip.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return toString;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 

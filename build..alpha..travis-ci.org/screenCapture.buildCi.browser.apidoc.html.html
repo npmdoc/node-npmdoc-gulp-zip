@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/sindresorhus/gulp-zip#readme"
-
-    >gulp-zip (v4.0.0)</a>
+    <a href="https://github.com/sindresorhus/gulp-zip#readme">gulp-zip (v4.0.0)</a>
 </h1>
 <h4>ZIP compress files</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-zip">module gulp-zip</a><ol>
 
@@ -94,9 +87,9 @@
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">(filename, opts) =&#x3e; {
+    <li>description and source-code<pre class="apidocCodePre">(filename, opts) =&gt; {
 	if (!filename) {
-		throw new gutil.PluginError(&#x27;gulp-zip&#x27;, &#x27;`filename` required&#x27;);
+		throw new gutil.PluginError('gulp-zip', '`filename` required');
 	}
 
 	opts = Object.assign({
@@ -106,20 +99,20 @@
 	let firstFile;
 	const zip = new Yazl.ZipFile();
 
-	return through.obj((file, enc, cb) =&#x3e; {
+	return through.obj((file, enc, cb) =&gt; {
 		if (!firstFile) {
 			firstFile = file;
 		}
 
 		// Because Windows...
-		const pathname = file.relative.replace(/\\/g, &#x27;/&#x27;);
+		const pathname = file.relative.replace(/\\/g, '/');
 
 		if (!pathname) {
 			cb();
 			return;
 		}
 
-		if (file.isNull() &#x26;&#x26; file.stat &#x26;&#x26; file.stat.isDirectory &#x26;&#x26; file.stat.isDirectory()) {
+		if (file.isNull() &amp;&amp; file.stat &amp;&amp; file.stat.isDirectory &amp;&amp; file.stat.isDirectory()) {
 			zip.addEmptyDirectory(pathname, {
 				mtime: file.stat.mtime || new Date(),
 				mode: file.stat.mode
@@ -147,7 +140,7 @@
 			return;
 		}
 
-		getStream.buffer(zip.outputStream).then(data =&#x3e; {
+		getStream.buffer(zip.outputStream).then(data =&gt; {
 			this.push(new gutil.File({
 				cwd: firstFile.cwd,
 				base: firstFile.base,
@@ -188,3 +181,4 @@
     ]
 </div>
 </div>
+</body></html>
