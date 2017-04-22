@@ -1,9 +1,14 @@
-# api documentation for  [gulp-zip (v4.0.0)](https://github.com/sindresorhus/gulp-zip#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-zip.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-zip) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-zip.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-zip)
+# npmdoc-gulp-zip
+
+#### api documentation for  [gulp-zip (v4.0.0)](https://github.com/sindresorhus/gulp-zip#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-zip.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-zip) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-zip.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-zip)
+
 #### ZIP compress files
 
 [![NPM](https://nodei.co/npm/gulp-zip.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-zip)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/screenCapture.buildCi.browser.apidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-gulp-zip/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-zip/build/screenCapture.npmPackageListing.svg)
 
@@ -78,108 +83,9 @@
     "scripts": {
         "test": "xo && ava"
     },
-    "version": "4.0.0"
+    "version": "4.0.0",
+    "bin": {}
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module gulp-zip](#apidoc.module.gulp-zip)
-1.  [function <span class="apidocSignatureSpan"></span>gulp-zip (filename, opts)](#apidoc.element.gulp-zip.gulp-zip)
-1.  [function <span class="apidocSignatureSpan">gulp-zip.</span>toString ()](#apidoc.element.gulp-zip.toString)
-
-
-
-# <a name="apidoc.module.gulp-zip"></a>[module gulp-zip](#apidoc.module.gulp-zip)
-
-#### <a name="apidoc.element.gulp-zip.gulp-zip"></a>[function <span class="apidocSignatureSpan"></span>gulp-zip (filename, opts)](#apidoc.element.gulp-zip.gulp-zip)
-- description and source-code
-```javascript
-(filename, opts) => {
-	if (!filename) {
-		throw new gutil.PluginError('gulp-zip', ''filename' required');
-	}
-
-	opts = Object.assign({
-		compress: true
-	}, opts);
-
-	let firstFile;
-	const zip = new Yazl.ZipFile();
-
-	return through.obj((file, enc, cb) => {
-		if (!firstFile) {
-			firstFile = file;
-		}
-
-		// Because Windows...
-		const pathname = file.relative.replace(/\\/g, '/');
-
-		if (!pathname) {
-			cb();
-			return;
-		}
-
-		if (file.isNull() && file.stat && file.stat.isDirectory && file.stat.isDirectory()) {
-			zip.addEmptyDirectory(pathname, {
-				mtime: file.stat.mtime || new Date(),
-				mode: file.stat.mode
-			});
-		} else {
-			const stat = {
-				compress: opts.compress,
-				mtime: file.stat ? file.stat.mtime : new Date(),
-				mode: file.stat ? file.stat.mode : null
-			};
-
-			if (file.isStream()) {
-				zip.addReadStream(file.contents, pathname, stat);
-			}
-
-			if (file.isBuffer()) {
-				zip.addBuffer(file.contents, pathname, stat);
-			}
-		}
-
-		cb();
-	}, function (cb) {
-		if (!firstFile) {
-			cb();
-			return;
-		}
-
-		getStream.buffer(zip.outputStream).then(data => {
-			this.push(new gutil.File({
-				cwd: firstFile.cwd,
-				base: firstFile.base,
-				path: path.join(firstFile.base, filename),
-				contents: data
-			}));
-
-			cb(); // eslint-disable-line promise/no-callback-in-promise
-		});
-
-		zip.end();
-	});
-}
-```
-- example usage
-```shell
-n/a
-```
-
-#### <a name="apidoc.element.gulp-zip.toString"></a>[function <span class="apidocSignatureSpan">gulp-zip.</span>toString ()](#apidoc.element.gulp-zip.toString)
-- description and source-code
-```javascript
-toString = function () {
-    return toString;
-}
-```
-- example usage
-```shell
-n/a
 ```
 
 
